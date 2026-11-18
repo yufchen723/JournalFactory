@@ -1,0 +1,89 @@
+# Adapted in structure from nature-skills (nature-writing/manifest.yaml), Apache-2.0;
+# Cell rules from cell-shared/journal-formats/cell.md.
+name: cell-writing
+version: 0.1.0
+description: >
+  Declarative manifest for the cell-writing router. SKILL.md uses it to decide
+  which files to load for a drafting, restructuring, compression or checking
+  request on a manuscript for the journal Cell.
+
+always_load:
+  # Shared layer
+  - ../cell-shared/journal-formats/cell.md        # the only source of Cell numbers and rules
+  - ../cell-shared/core/terminology-ledger.md
+  # Skill-local core
+  - static/core/stance.md
+  - static/core/workflow.md
+
+axes:
+  part:
+    detect: |
+      Identify which manuscript part(s) the user wants drafted, rebuilt,
+      shortened or checked. Several may be named. "Abstract" means summary.
+      "In brief" means etoc. "Methods" means star-methods. "Captions" means
+      legends. "Limitations" means discussion. Ask only when the part is
+      ambiguous and the choice changes the draft. Title, summary, highlights
+      and etoc are written last but planned first.
+    values:
+      title:         references/title.md
+      # The Summary guidance (rules, budget, procedure) is one file in the shared
+      # layer; there is no separate references/ file for it.
+      summary:       ../cell-shared/core/cell-summary.md
+      highlights:    references/highlights.md
+      etoc:          references/etoc-blurb.md
+      introduction:  references/introduction.md
+      results:       references/results.md
+      discussion:    references/discussion-limitations.md
+      star-methods:  references/star-methods.md
+      legends:       references/figure-legends.md
+      cover-letter:  references/cover-letter.md
+    multi: true
+
+  stage:
+    detect: |
+      Which submission stage the text is for (cell.md section 1). Initial
+      submission is free format: report format rules as "needed later".
+      Revision requires the component order and STAR Methods. Final files add
+      highlights, eTOC blurb and graphical abstract. Use the user's statement;
+      otherwise default to revision, the strictest stage for text.
+    values:
+      initial:   "free format; length and display-item limits of the article type still apply"
+      revision:  "components and order of cell.md section 3; legends per section 4; STAR Methods required"
+      final:     "revision rules plus highlights and eTOC blurb in one separate Word file (section 6)"
+    default: revision
+    multi: false
+    loads_files: false
+
+references:
+  on_demand:
+    - condition: a title, highlights, eTOC blurb or cover letter must restate the Summary's central claim, or the Summary must be re-audited after Results changed
+      path: ../cell-shared/core/cell-summary.md
+    - condition: drafting or restructuring the Introduction; the gap is vague; the closing statement lists activities instead of a finding; Introduction and Results answer different questions
+      path: ../cell-shared/core/cell-introduction.md
+    - condition: planning Results subsections and figure titles; ordering claims across at most 7 display items; a Discussion that repeats Results; writing or auditing "Limitations of the study"
+      path: ../cell-shared/core/cell-results-discussion.md
+    - condition: main text is at or near the word limit; deciding what belongs in main text, legends, STAR Methods, Figure S or Table S; text grew during revision
+      path: ../cell-shared/core/main-text-discipline.md
+    - condition: auditing an existing or multiply revised draft for drift in terms, numbers, callouts, supplemental naming, spelling or claim strength; synchronizing the front-matter file and cover letter with the manuscript
+      path: ../cell-shared/core/consistency-sweep.md
+    - condition: language-only editing of existing prose; US usage; abbreviations; gene and protein typography; novelty claims; footnotes; sentence-level compression
+      path: references/polishing.md
+    - condition: the user asks whether something is an official Cell requirement, where a number comes from, or what was not verified
+      path: references/source-basis.md
+    - condition: the user wants a full-manuscript scaffold or asks for the order of components
+      path: templates/manuscript_skeleton.md
+    - condition: the user wants the highlights and eTOC blurb file
+      path: templates/highlights_etoc.md
+    - condition: the user wants a STAR Methods scaffold or is converting a free-text methods section
+      path: templates/star_methods_skeleton.md
+
+quality_tools:
+  text_check_script: scripts/cell_text_check.py
+  use_when: a draft with a countable limit is returned (title, Summary, keywords, main text, display items, highlights, eTOC blurb) or a full draft is audited
+  modes:
+    manuscript: "cell_text_check.py MANUSCRIPT.md [--stage initial|revision|final] [--type research|resource|theory|matters-arising|short] [--json]"
+    front_matter: "cell_text_check.py --highlights FILE"
+    self_test: "cell_text_check.py --self-test"
+  exit_code: 1 when a hard limit fails; WARN and LATER lines do not change the exit code
+  script_resolution: resolve relative to this skill directory, never the user's working directory
+  tests: tests/

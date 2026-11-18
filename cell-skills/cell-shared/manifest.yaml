@@ -1,0 +1,36 @@
+# Adapted in structure from nature-skills (nature-shared/manifest.yaml), Apache-2.0;
+# Cell rules from cell-shared/journal-formats/cell.md.
+name: cell-shared
+version: 0.1.0
+description: >
+  Declarative manifest for the shared Cell reference modules. Not a standalone
+  workflow. Cell skills load exact files from here on demand.
+
+# Never preload the whole package. Load the one file a condition selects, then
+# return to the requesting skill.
+always_load: []
+
+journal_formats:
+  on_demand:
+    - condition: any exact Cell limit, component order, stage rule, legend rule, front-matter rule, supplemental naming or reference style is stated or checked
+      path: journal-formats/cell.md
+
+core:
+  on_demand:
+    - condition: drafting, compressing or auditing the Summary; deciding its sentence budget; removing citations, non-standard abbreviations or novelty words
+      path: core/cell-summary.md
+    - condition: drafting, restructuring or auditing the Introduction; stating the exact knowledge gap; writing the closing statement of what was achieved; checking alignment with Results
+      path: core/cell-introduction.md
+    - condition: drafting or auditing Results subheadings and figure titles; ordering claims across the display items; separating Results from Discussion; writing "Limitations of the study"
+      path: core/cell-results-discussion.md
+    - condition: main text is at or near 7,000 words; deciding what goes in main text, main legends, STAR Methods, Figure S or Table S; compressing after a revision round
+      path: core/main-text-discipline.md
+    - condition: first contact with a manuscript or notes; fixing canonical names for terms, genes, proteins, figures and supplemental items before drafting
+      path: core/terminology-ledger.md
+    - condition: auditing an existing or multiply revised manuscript for drift in names, numbers, figure callouts, supplemental naming, spelling or claims
+      path: core/consistency-sweep.md
+
+quality_tools:
+  text_check_script: ../cell-writing/scripts/cell_text_check.py
+  use_when: a full draft, a Summary, or a highlights/eTOC file must be checked against the countable Cell limits
+  script_resolution: resolve relative to this package directory, never the user's working directory

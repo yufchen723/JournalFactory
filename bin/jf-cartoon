@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# BioCartoon inside Journal Factory (private environment in tools/biocartoon_env; icon searches run on the local catalogue).
+JF="$(cd "$(dirname "$0")/.." && pwd)"; BC="$JF/tools/biocartoon_env/bin/biocartoon"
+if [ ! -x "$BC" ]; then echo "BioCartoon is not installed here. Run: python3 -m venv $JF/tools/biocartoon_env && $JF/tools/biocartoon_env/bin/pip install biocartoon==0.4.10" >&2; exit 1; fi
+case "$1" in upload|upload-key|install-skills) echo "jf-cartoon: '$1' is switched off in Journal Factory (it publishes content or writes outside this folder)." >&2; exit 2;; esac
+exec "$BC" "$@"

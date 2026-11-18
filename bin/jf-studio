@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Journal Factory's own writing + figure studio (its copy of the Folio editor, with the Journal tab). Same commands as `folio`.
+exec python3 "$(cd "$(dirname "$0")/.." && pwd)/studio/folio.py" "$@"

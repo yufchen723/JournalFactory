@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+tools/biocartoon_env/
+.studio/
+projects/*
+!projects/.gitkeep
+fields/*
+!fields/.gitkeep
+*.qa.json
+.DS_Store

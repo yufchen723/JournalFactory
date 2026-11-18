@@ -1,0 +1,121 @@
+{
+ "id": "nature-biotechnology",
+ "name": "Nature Biotechnology",
+ "publisher": "Springer Nature",
+ "family": "nature",
+ "article_type": "Article",
+ "tier": 1,
+ "scope": "Enabling technology with a demonstrated application of wide use.",
+ "limits": {
+  "main_display_items": 6,
+  "main_text_words": 3000,
+  "abstract_words": 150,
+  "references": 50,
+  "extended_items": 10
+ },
+ "figure": {
+  "widths_mm": {
+   "single": 89,
+   "double": 183
+  },
+  "max_height_mm": 247,
+  "recommended_height_mm": 170,
+  "font_family": [
+   "Arial",
+   "Helvetica"
+  ],
+  "font_pt": {
+   "min": 5,
+   "max": 7
+  },
+  "panel_label": {
+   "case": "lower",
+   "pt": 8,
+   "bold": true
+  },
+  "line_pt": {
+   "min": 0.25,
+   "max": 1
+  },
+  "dpi": {
+   "photo": 300,
+   "line_art": 600
+  },
+  "color": "RGB",
+  "formats": [
+   "AI",
+   "EPS",
+   "PDF (editable text)"
+  ],
+  "max_file_mb": 50,
+  "notes": [
+   "Text stays editable (not outlined).",
+   "No coloured text, drop shadows or gridlines; avoid red/green and rainbow scales.",
+   "Scale bars, not magnification.",
+   "Legends under 300 words; title sentence then per-panel text with n, test and error definition."
+  ]
+ },
+ "sections": [
+  "Title",
+  "Authors",
+  "Abstract",
+  "Introduction (no heading)",
+  "Results",
+  "Discussion",
+  "Methods",
+  "Data availability",
+  "Code availability",
+  "References",
+  "Acknowledgements",
+  "Author contributions",
+  "Competing interests",
+  "Extended Data legends"
+ ],
+ "front_matter": [
+  "Abstract"
+ ],
+ "methods": {
+  "name": "Methods",
+  "order": [],
+  "word_limit": null
+ },
+ "supplemental": {
+  "figures": "Extended Data (<=10 items)",
+  "tables": "Supplementary Tables",
+  "note": "Supplementary Information should not contain figures (Nature)."
+ },
+ "citation_style": "numbered superscript",
+ "extras": [
+  "Reporting Summary",
+  "Data availability statement",
+  "Code availability statement",
+  "Source data per figure"
+ ],
+ "bar": {
+  "concept": 2,
+  "technology": 3,
+  "scale": 2,
+  "orthogonal": 2,
+  "replication": 2,
+  "function": 0,
+  "clinical": 1,
+  "resource": 2
+ },
+ "verified": {
+  "level": "memory",
+  "note": "Not read today. Confirm on nature.com/nbt."
+ },
+ "sources": [
+  {
+   "url": "https://www.nature.com/nbt/content",
+   "status": "not-read",
+   "date": "2026-11-18"
+  }
+ ],
+ "skills": [
+  "vendor/nature-skills/nature-figure",
+  "vendor/nature-skills/nature-writing",
+  "vendor/nature-skills/nature-statistics",
+  "vendor/nature-skills/nature-shared"
+ ]
+}

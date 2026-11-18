@@ -1,0 +1,100 @@
+{
+ "id": "science",
+ "name": "Science",
+ "publisher": "AAAS",
+ "family": "other",
+ "article_type": "Article",
+ "tier": 1,
+ "scope": "Broad-interest advances; short format.",
+ "limits": {
+  "main_display_items": 6,
+  "main_text_words": 4500,
+  "abstract_words": 125,
+  "references": 50
+ },
+ "figure": {
+  "widths_mm": {
+   "single": 57,
+   "mid": 121,
+   "double": 184
+  },
+  "max_height_mm": 230,
+  "font_family": [
+   "Helvetica",
+   "Arial"
+  ],
+  "font_pt": {
+   "min": 5,
+   "max": 8
+  },
+  "panel_label": {
+   "case": "upper",
+   "pt": 8,
+   "bold": true
+  },
+  "line_pt": {
+   "min": 0.5,
+   "max": 1.5
+  },
+  "dpi": {
+   "photo": 300,
+   "line_art": 600
+  },
+  "color": "RGB",
+  "formats": [
+   "PDF",
+   "EPS",
+   "AI"
+  ],
+  "notes": [
+   "Confirm on science.org."
+  ]
+ },
+ "sections": [
+  "Title",
+  "Authors",
+  "Abstract",
+  "Main text (no headings for Reports)",
+  "References and notes",
+  "Acknowledgments",
+  "Supplementary Materials"
+ ],
+ "front_matter": [
+  "Abstract"
+ ],
+ "methods": {
+  "name": "Materials and Methods (in Supplementary Materials)",
+  "order": [],
+  "word_limit": null
+ },
+ "supplemental": {
+  "figures": "Figs S1-Sn",
+  "tables": "Tables S1-Sn"
+ },
+ "citation_style": "numbered superscript",
+ "extras": [
+  "Data and materials availability statement"
+ ],
+ "bar": {
+  "concept": 3,
+  "technology": 2,
+  "scale": 2,
+  "orthogonal": 3,
+  "replication": 2,
+  "function": 3,
+  "clinical": 1,
+  "resource": 2
+ },
+ "verified": {
+  "level": "memory",
+  "note": "Not read today. Confirm on science.org."
+ },
+ "sources": [
+  {
+   "url": "https://www.science.org/content/page/instructions-preparing-initial-manuscript",
+   "status": "not-read",
+   "date": "2026-11-18"
+  }
+ ],
+ "skills": []
+}

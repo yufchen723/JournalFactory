@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Folio Studio</title>
+<link rel="stylesheet" href="/editor/editor.css">
+</head>
+<body>
+<div id="topbar">
+  <div id="qbar">
+    <span class="brand">Journal Factory</span>
+    <select id="folioSelect" title="Switch folio"></select>
+    <span id="modeBadge" class="badge"></span>
+    <button id="btnUndo" class="qa" title="Undo (Ctrl/⌘Z)">↶</button>
+    <button id="btnRedo" class="qa" title="Redo (Ctrl/⌘⇧Z)">↷</button>
+    <span id="saveState" class="muted">saved</span>
+    <nav id="rtabs">
+      <button data-rt="home" class="on">Home</button><button data-rt="insert">Insert</button><button data-rt="format">Shape Format</button><button data-rt="arrange">Arrange</button><button data-rt="review">Review</button><button data-rt="journal" id="rtJournal" hidden>Journal</button>
+    </nav>
+    <span class="grow"></span>
+    <button id="btnAskTop" class="primary" title="Ask / Edit with Claude about the selection (or the whole folio)">✳ Ask Claude</button>
+    <button id="btnThreads" class="toggle" title="Threads (Ask / Edit conversations)">Threads <span id="threadCount" class="pill"></span></button>
+    <button id="btnNotes" class="toggle" title="Notes saved on this folio">Notes <span id="noteCount" class="pill"></span></button>
+  </div>
+  <div id="ribbon">
+    <!-- HOME -->
+    <div class="rpanel on" data-rt="home">
+      <div class="rg"><div class="rb">
+        <button data-cmd="paste" class="big" title="Paste copied blocks (Ctrl/⌘V)"><i>📋</i>Paste</button>
+        <div class="col"><button data-cmd="cut" title="Cut blocks (Ctrl/⌘X)">✂ Cut</button><button data-cmd="copy" title="Copy blocks (Ctrl/⌘C)">⧉ Copy</button><button data-cmd="duplicate" title="Duplicate (Ctrl/⌘D)">⧉+ Duplicate</button></div>
+      </div><div class="rn">Clipboard</div></div>
+      <div class="rg"><div class="rb">
+        <button data-cmd="textbox" class="big" title="Insert a text box (T)"><i>𝐓</i>Text Box</button>
+        <button data-cmd="picture" class="big" title="Insert a picture (I)"><i>🖼</i>Picture</button>
+        <div class="dd"><button class="big ddb" title="Insert a shape or line"><i>◇</i>Shapes ▾</button><div class="ddm shapes"></div></div>
+      </div><div class="rn">Insert</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row">
+          <input id="fontName" list="fontList" class="fname" title="Font" placeholder="Font">
+          <input id="fontSize" list="sizeList" class="fsize" title="Font size (pt)" placeholder="pt">
+          <button data-cmd="grow" title="Increase font size (Ctrl/⌘⇧>)">A<sup>+</sup></button><button data-cmd="shrink" title="Decrease font size (Ctrl/⌘⇧<)">A<sup>−</sup></button>
+          <button data-cmd="removeFormat" title="Clear formatting">A⌫</button>
+        </div>
+        <div class="row">
+          <button data-cmd="bold" data-state="bold" title="Bold (Ctrl/⌘B)"><b>B</b></button><button data-cmd="italic" data-state="italic" title="Italic (Ctrl/⌘I)"><i>I</i></button><button data-cmd="underline" data-state="underline" title="Underline (Ctrl/⌘U)"><u>U</u></button><button data-cmd="strikeThrough" data-state="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <button data-cmd="superscript" data-state="superscript" title="Superscript">x²</button><button data-cmd="subscript" data-state="subscript" title="Subscript">x₂</button>
+          <label class="clr" title="Font color"><span>A</span><span class="bar" id="fontColorBar"></span><input type="color" id="fontColor" value="#C00000"></label>
+          <label class="clr" title="Text highlight color"><span>🖍</span><span class="bar" id="hiliteBar"></span><input type="color" id="hiliteColor" value="#FFFF00"></label>
+        </div>
+      </div><div class="rn">Font</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row">
+          <button data-cmd="insertUnorderedList" data-state="insertUnorderedList" title="Bullets">• ≡</button><button data-cmd="insertOrderedList" data-state="insertOrderedList" title="Numbering">1. ≡</button>
+          <button data-cmd="outdent" title="Decrease list level (Shift+Tab)">⇤</button><button data-cmd="indent" title="Increase list level (Tab)">⇥</button>
+          <select id="lineSpacing" title="Line spacing"><option value="">↕ spacing</option><option>1.0</option><option>1.15</option><option>1.3</option><option>1.5</option><option>2.0</option></select>
+        </div>
+        <div class="row">
+          <button data-cmd="justifyLeft" data-state="justifyLeft" title="Align left">⫷</button><button data-cmd="justifyCenter" data-state="justifyCenter" title="Center">≡</button><button data-cmd="justifyRight" data-state="justifyRight" title="Align right">⫸</button><button data-cmd="justifyFull" data-state="justifyFull" title="Justify">☰</button>
+          <span class="vsep"></span>
+          <button data-cmd="vtop" title="Align text to top">⤒</button><button data-cmd="vmiddle" title="Align text to middle">⇕</button><button data-cmd="vbottom" title="Align text to bottom">⤓</button>
+        </div>
+      </div><div class="rn">Paragraph</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><label class="clr" title="Shape / text box fill"><span>🪣</span><span class="bar" id="fillBar"></span><input type="color" id="fillColor" value="#4472C4"></label><button data-cmd="nofill" title="No fill">∅ fill</button></div>
+        <div class="row"><label class="clr" title="Outline color"><span>▭</span><span class="bar" id="lineBar"></span><input type="color" id="lineColor" value="#2F528F"></label><button data-cmd="noline" title="No outline">∅ line</button></div>
+      </div><div class="rn">Drawing</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><button data-cmd="front" title="Bring to front">⬆ Front</button><button data-cmd="back" title="Send to back">⬇ Back</button></div>
+        <div class="row"><button data-cmd="delete" title="Delete (Del)">🗑 Delete</button><button data-cmd="lock" title="Lock / unlock (L)">🔒 Lock</button></div>
+      </div><div class="rn">Arrange</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><button data-cmd="group" title="Group (Ctrl/⌘G)">⧉ Group</button><button data-cmd="ungroup" title="Ungroup (Ctrl/⌘⇧G)">⧈ Ungroup</button></div>
+        <div class="row"><button data-cmd="crop" data-crop title="Crop picture (or double-click it)">⌗ Crop</button><button data-cmd="resetCrop" title="Undo the crop of this picture">↺ Reset crop</button></div>
+      </div><div class="rn">Group · picture</div></div>
+      <div class="rg"><div class="rb col2">
+        <button id="btnSnap" class="toggle on" title="Snap to 1 mm grid">⌗ Snap</button>
+        <button id="btnGrid" class="toggle" title="Show grid">▦ Grid</button>
+      </div><div class="rn">Guides</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row zoom"><button id="zoomOut" class="zbtn" title="Zoom out (−)">−</button><input id="zoom" type="range" min="25" max="400" step="5" value="100"><button id="zoomIn" class="zbtn" title="Zoom in (+)">+</button> <span id="zoomVal">100%</span></div>
+        <div class="row"><button id="btnFit" title="Fit page to window and centre it (0)">Fit</button><button data-cmd="zoom100">100%</button></div>
+      </div><div class="rn">Zoom</div></div>
+    </div>
+    <!-- INSERT -->
+    <div class="rpanel" data-rt="insert">
+      <div class="rg"><div class="rb">
+        <button data-cmd="textbox" class="big"><i>𝐓</i>Text Box</button>
+        <button data-cmd="picture" class="big"><i>🖼</i>Picture</button>
+        <input type="file" id="fileInput" accept="image/*,.pdf,.svg" hidden>
+      </div><div class="rn">Text &amp; images</div></div>
+      <div class="rg"><div class="rb shapes inline"></div><div class="rn">Shapes &amp; lines</div></div>
+    </div>
+    <!-- SHAPE FORMAT -->
+    <div class="rpanel" data-rt="format">
+      <div class="rg"><div class="rb col2">
+        <div class="row"><label class="clr" title="Fill"><span>🪣 Fill</span><span class="bar" id="fillBar2"></span><input type="color" id="fillColor2" value="#4472C4"></label><button data-cmd="nofill">No fill</button></div>
+        <div class="row"><label class="clr" title="Outline"><span>▭ Outline</span><span class="bar" id="lineBar2"></span><input type="color" id="lineColor2" value="#2F528F"></label><button data-cmd="noline">No outline</button></div>
+      </div><div class="rn">Fill &amp; outline</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><label class="lbl">Weight <select id="lineWeight"><option value="">pt</option><option>0.25</option><option>0.5</option><option>0.75</option><option>1</option><option>1.5</option><option>2.25</option><option>3</option><option>4.5</option><option>6</option></select></label></div>
+        <div class="row"><label class="lbl">Dash <select id="lineDash"><option value="">—</option><option value="solid">solid</option><option value="dash">dash</option><option value="dot">dot</option></select></label>
+        <label class="lbl">Corner <input id="cornerR" type="number" step="0.5" min="0" class="num" title="Corner radius (mm)"></label></div>
+      </div><div class="rn">Line</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><label class="lbl">X <input id="geoX" type="number" step="0.5" class="num"></label><label class="lbl">Y <input id="geoY" type="number" step="0.5" class="num"></label><label class="lbl">⟲ <input id="geoR" type="number" step="1" class="num" title="Rotation (°)"></label></div>
+        <div class="row"><label class="lbl">W <input id="geoW" type="number" step="0.5" min="1" class="num"></label><label class="lbl">H <input id="geoH" type="number" step="0.5" min="1" class="num"></label><span class="muted">mm</span></div>
+      </div><div class="rn">Size &amp; position</div></div>
+      <div class="rg"><div class="rb">
+        <button data-cmd="crop" data-crop class="big" title="Crop picture (or double-click it); Enter / Esc to finish"><i>⌗</i>Crop</button>
+        <button data-cmd="resetCrop" class="big" title="Show the whole picture again"><i>↺</i>Reset crop</button>
+      </div><div class="rn">Picture</div></div>
+    </div>
+    <!-- ARRANGE -->
+    <div class="rpanel" data-rt="arrange">
+      <div class="rg"><div class="rb col2">
+        <div class="row"><button data-cmd="front">⬆ Bring to front</button><button data-cmd="forward">↑ Forward</button></div>
+        <div class="row"><button data-cmd="back">⬇ Send to back</button><button data-cmd="backward">↓ Backward</button></div>
+      </div><div class="rn">Order</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><button data-cmd="alignL" title="Align left">⊢ Left</button><button data-cmd="alignC" title="Align centre">⊹ Center</button><button data-cmd="alignR" title="Align right">⊣ Right</button><button data-cmd="distH" title="Distribute horizontally (3+)">↔ Distribute</button></div>
+        <div class="row"><button data-cmd="alignT" title="Align top">⊤ Top</button><button data-cmd="alignM" title="Align middle">⊶ Middle</button><button data-cmd="alignB" title="Align bottom">⊥ Bottom</button><button data-cmd="distV" title="Distribute vertically (3+)">↕ Distribute</button></div>
+      </div><div class="rn">Align (to selection; one block → page)</div></div>
+      <div class="rg"><div class="rb col2">
+        <div class="row"><button data-cmd="rotL">⟲ 90°</button><button data-cmd="rotR">⟳ 90°</button></div>
+        <div class="row"><button data-cmd="lock">🔒 Lock</button><button data-cmd="delete">🗑 Delete</button></div>
+      </div><div class="rn">Rotate · lock</div></div>
+      <div class="rg"><div class="rb">
+        <button data-cmd="group" class="big" title="Group (Ctrl/⌘G)"><i>⧉</i>Group</button>
+        <button data-cmd="ungroup" class="big" title="Ungroup (Ctrl/⌘⇧G)"><i>⧈</i>Ungroup</button>
+      </div><div class="rn">Group</div></div>
+    </div>
+    <!-- REVIEW -->
+    <div class="rpanel" data-rt="journal">
+      <div class="rg"><div class="rb col2">
+        <select id="jSel" title="Journal this page is prepared for"><option value="">No journal</option></select>
+        <span id="jInfo" class="jinfo"></span>
+      </div><div class="rn">Journal</div></div>
+      <div class="rg" id="jWidthG"><div class="rb" id="jWidths"></div><div class="rn">Page width</div></div>
+      <div class="rg"><div class="rb">
+        <button id="jCheck" class="big" title="Check this page against the journal's rules"><i>✔</i>Check</button>
+        <span id="jCount" class="jinfo"></span>
+      </div><div class="rn">Rules</div></div>
+      <div class="rg"><div class="rb col2" id="jAsk"></div><div class="rn">Ask Claude, for this journal</div></div>
+      <div class="rg"><div class="rb"><select id="jNav" title="Other parts of this manuscript"><option value="">Manuscript parts…</option></select></div><div class="rn">Manuscript</div></div>
+    </div>
+    <div class="rpanel" data-rt="review">
+      <div class="rg"><div class="rb">
+        <button data-cmd="ask" class="big"><i>✳</i>Ask Claude</button>
+        <button id="btnShot" class="big" title="Screenshot a region and attach it to Ask (S)"><i>📷</i>Screenshot</button>
+      </div><div class="rn">Claude</div></div>
+      <div class="rg"><div class="rb">
+        <select id="versions" title="Versions"><option value="">Versions</option></select>
+        <button id="btnExport" title="Export PDF at page size">⬇ Export PDF</button>
+      </div><div class="rn">Versions · export</div></div>
+    </div>
+  </div>
+  <datalist id="fontList"><option>Arial</option><option>Helvetica</option><option>Liberation Sans</option><option>Calibri</option><option>Aptos</option><option>Verdana</option><option>Times New Roman</option><option>Georgia</option><option>Cambria</option><option>Courier New</option><option>Noto Sans CJK SC</option><option>Microsoft YaHei</option><option>SimSun</option><option>PingFang SC</option></datalist>
+  <datalist id="sizeList"><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>14</option><option>16</option><option>18</option><option>20</option><option>24</option><option>28</option><option>32</option><option>36</option><option>40</option><option>44</option><option>48</option><option>54</option><option>60</option><option>66</option><option>72</option><option>80</option><option>96</option></datalist>
+</div>
+
+<div id="main">
+  <div id="viewport">
+    <div id="pageSizer">
+      <div id="pageWrap">
+        <div id="page"></div>
+        <div id="shotLayer" hidden><div id="shotRect"></div><div id="shotHint">Drag a rectangle · <b>A</b> whole page · <b>Esc</b> cancel</div></div>
+      </div>
+    </div>
+  </div>
+  <aside id="side" hidden>
+    <div id="sideHead"><span id="sideTitle">Threads</span><span class="grow"></span><button id="sideExpand" class="mini">Expand all</button><button id="sideCollapse" class="mini">Collapse all</button><button id="sideClose" class="mini">✕</button></div>
+    <div id="sideBody"></div>
+  </aside>
+</div>
+
+<!-- floating selection toolbar -->
+<div id="selTools" hidden>
+  <button id="askBtn" title="Ask / Edit with Claude">✳</button>
+  <button id="trBtn" title="Translate">文</button>
+</div>
+
+<!-- Ask / Edit box -->
+<div id="askBox" hidden>
+  <div id="askHead"><span class="grip">⠿</span>
+    <button class="tab on" data-tab="ask">Ask</button><button class="tab" data-tab="edit">Edit</button>
+    <span class="grow"></span><button id="askClose" class="mini">✕</button></div>
+  <div id="askAnchor" class="anchor"></div>
+  <div id="askPresets"></div>
+  <textarea id="askText" placeholder="Ask about the selection, or describe the edit. Paste or drop screenshots here."></textarea>
+  <div id="askImages"></div>
+  <div id="askFoot">
+    <button id="askAttach" class="mini">📎 Image</button>
+    <input type="file" id="askFile" accept="image/*" multiple hidden>
+    <label id="askScope" hidden><input type="checkbox" id="askConfirm" checked> ask before re-running analyses</label>
+    <span class="grow"></span>
+    <button id="askSend" class="primary">Send</button>
+  </div>
+  <div id="askDrop">Drop image to attach</div>
+</div>
+
+<!-- Translate popover -->
+<div id="trPop" hidden>
+  <div class="trHead"><span class="grip">⠿</span><select id="trLang"></select><span class="grow"></span><button id="trClose" class="mini">✕</button></div>
+  <div id="trSrc" class="trSrc"></div>
+  <div id="trOut" class="trOut"></div>
+</div>
+
+<!-- Suggestion popover -->
+<div id="sugPop" hidden></div>
+<!-- Note popover -->
+<div id="notePop" hidden></div>
+
+<div id="toast" hidden></div>
+
+<script src="/editor/editor.js"></script>
+<script src="/editor/ribbon.js"></script>
+<script src="/editor/journal.js"></script>
+</body>
+</html>

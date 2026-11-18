@@ -1,0 +1,103 @@
+{
+ "id": "neuro-oncology",
+ "name": "Neuro-Oncology",
+ "publisher": "Oxford University Press",
+ "family": "other",
+ "article_type": "Article",
+ "tier": 3,
+ "scope": "Neuro-oncology community; clinical association with tissue validation is usually enough.",
+ "limits": {
+  "main_display_items": 6,
+  "main_text_words": 6000,
+  "abstract_words": 250,
+  "references": 50
+ },
+ "figure": {
+  "widths_mm": {
+   "single": 86,
+   "double": 178
+  },
+  "max_height_mm": 230,
+  "font_family": [
+   "Arial",
+   "Helvetica"
+  ],
+  "font_pt": {
+   "min": 6,
+   "max": 9
+  },
+  "panel_label": {
+   "case": "upper",
+   "pt": 9,
+   "bold": true
+  },
+  "line_pt": {
+   "min": 0.5,
+   "max": 1.5
+  },
+  "dpi": {
+   "photo": 300,
+   "line_art": 600
+  },
+  "color": "RGB",
+  "formats": [
+   "TIFF",
+   "EPS",
+   "PDF"
+  ],
+  "notes": [
+   "Confirm on the OUP site."
+  ]
+ },
+ "sections": [
+  "Title",
+  "Structured abstract (Background, Methods, Results, Conclusions)",
+  "Key Points",
+  "Importance of the Study",
+  "Introduction",
+  "Materials and Methods",
+  "Results",
+  "Discussion",
+  "References"
+ ],
+ "front_matter": [
+  "Structured abstract (<=250 words)",
+  "Key Points (3 bullets)",
+  "Importance of the Study (<=150 words)"
+ ],
+ "methods": {
+  "name": "Materials and Methods",
+  "order": [],
+  "word_limit": null
+ },
+ "supplemental": {
+  "figures": "Supplementary Figures",
+  "tables": "Supplementary Tables"
+ },
+ "citation_style": "numbered superscript",
+ "extras": [
+  "Data availability statement"
+ ],
+ "bar": {
+  "concept": 1,
+  "technology": 0,
+  "scale": 1,
+  "orthogonal": 1,
+  "replication": 1,
+  "function": 0,
+  "clinical": 2,
+  "resource": 1
+ },
+ "verified": {
+  "level": "memory",
+  "note": "Not read today; structured abstract, Key Points and Importance of the Study are required as I recall. Confirm on academic.oup.com/neuro-oncology."
+ },
+ "sources": [
+  {
+   "url": "https://academic.oup.com/neuro-oncology/pages/General_Instructions",
+   "status": "not-read",
+   "date": "2026-11-18"
+  }
+ ],
+ "skills": []
+}

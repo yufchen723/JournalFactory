@@ -1,0 +1,79 @@
+name: cell-figure
+version: 1.0.0
+description: >
+  Declarative manifest. SKILL.md uses it to decide what to load for a figure request.
+  Main axis: plotting backend (Python or R), chosen once and remembered. Design, template
+  and QA material stays in on-demand references. Pattern adapted from nature-skills
+  nature-figure (Apache-2.0).
+
+journal_format: ../cell-shared/journal-formats/cell.md
+
+always_load:
+  - static/core/contract.md
+  - static/core/stance.md
+
+routes:
+  graphical_abstract:
+    detect: The user asks for, plans, revises or checks a graphical abstract.
+    reference: references/graphical-abstract.md
+    script: scripts/validate_cell_figure.py --ga
+    backend_gate: false
+  audit_only:
+    detect: The user gives a finished file (PDF, TIFF, PNG, SVG) and asks whether it meets Cell's rules.
+    reference: references/qa-contract.md
+    script: scripts/validate_cell_figure.py
+    backend_gate: false
+  planning:
+    detect: The user asks what panels a figure needs, how to order figures, or what goes to Figure S.
+    reference: references/multipanel-evidence-architecture.md
+    backend_gate: false
+
+preference:
+  backend_script: scripts/cell_figure_backend.py
+  default_config: ~/.config/journal-factory/cell-figure.json
+  behavior: >
+    Explicit choice in the request, then the language of the supplied script, then a choice made
+    earlier in the task, then the saved preference. Otherwise ask once and save the answer.
+
+axes:
+  backend:
+    values:
+      python: static/fragments/backend/python.md
+      r: static/fragments/backend/r.md
+    multi: false
+  stage:
+    detect: First submission (free format) or revision / production files (Cell's figure rules apply).
+    values:
+      initial: "validate_cell_figure.py --stage initial (reports, never blocks)"
+      production: "validate_cell_figure.py (FAIL blocks)"
+    default: production
+
+scripts:
+  cell_style.py: matplotlib style, exact-size figures, capital panel letters, gates, export (PDF + LZW TIFF, RGB)
+  cell_templates.py: bar/box with points, paired lines, volcano, heatmap, dot plot, composition, spatial map; --demo
+  cell_theme.R: ggplot2 theme, palette, patchwork tags, save_cell_r
+  validate_cell_figure.py: audit of exported files against Cell's production rules; --ga, --stage, --self-test
+  cell_figure_backend.py: remember Python or R
+
+references:
+  on_demand:
+    - condition: exact Cell figure rules, stage boundaries, or a question of the form "does Cell allow"
+      path: references/cell-figure-requirements.md
+    - condition: plan, restructure or audit a multi-panel figure; main figure versus Figure S; the order of the seven figures
+      path: references/multipanel-evidence-architecture.md
+    - condition: pick or adapt a plotting template in Python or R
+      path: references/template-catalog.md
+    - condition: tissue or spatial maps, genome tracks, more than about 20,000 points, microscopy or histology plates
+      path: references/omics-spatial-panels.md
+    - condition: palette, font size, line weight, gray fills, colour-blind safety
+      path: references/design-notes.md
+    - condition: every generated or revised figure before it is handed over
+      path: references/qa-contract.md
+    - condition: graphical abstract
+      path: references/graphical-abstract.md
+    - condition: someone asks where a rule comes from
+      path: references/source-basis.md
+    - condition: legend text
+      path: ../cell-writing/references/figure-legends.md
+    - condition: statistics shown in a panel
+      path: ../cell-statistics/references/figure-statistics.md

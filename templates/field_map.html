@@ -1,0 +1,38 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>__TITLE__</title>
+<style>
+:root{--bg:#fbfbfa;--ink:#1a1a1a;--ink2:#55534e;--rule:#e5e3dd;--card:#fff;--acc:#2f6fb3}
+@media (prefers-color-scheme:dark){:root{--bg:#141414;--ink:#ededed;--ink2:#b9b7b0;--rule:#2f2f2c;--card:#1c1c1b;--acc:#79a9e0;color-scheme:dark}}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 system-ui,sans-serif}main{max-width:1200px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--ink2);margin-bottom:14px}
+#bar{display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:0;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--rule);z-index:2}
+input,select{font:inherit;padding:5px 8px;border:1px solid var(--rule);border-radius:6px;background:var(--card);color:var(--ink)}#q{flex:1;min-width:180px}
+#years{display:flex;align-items:flex-end;gap:3px;height:70px;margin:14px 0 4px}#years div{flex:1;background:var(--acc);opacity:.75;border-radius:2px 2px 0 0;position:relative;cursor:pointer}
+#years div span{position:absolute;bottom:-18px;left:0;right:0;text-align:center;font-size:10px;color:var(--ink2)}
+.tw{overflow-x:auto;margin-top:26px}table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;padding:7px 8px;border-bottom:1px solid var(--rule)}
+th{font-size:12px;color:var(--ink2);cursor:pointer;white-space:nowrap}td.f{min-width:340px}.t{font-weight:600}.c{display:inline-block;font-size:11px;padding:0 6px;margin:1px 2px 1px 0;border:1px solid var(--rule);border-radius:9px;color:var(--ink2)}
+.u{color:#b45309}a{color:var(--acc)}details{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:8px 12px;margin:10px 0}pre{white-space:pre-wrap;font:13px/1.5 system-ui,sans-serif;margin:8px 0 0}
+</style></head><body><main><h1>__TITLE__</h1><div class="sub" id="sub"></div>
+<details><summary>Field map (synthesis text)</summary><pre id="map"></pre></details>
+<div id="years"></div>
+<div id="bar"><input id="q" placeholder="Search title, author, finding…"><select id="th"><option value="">All themes</option></select><select id="ty"><option value="">All types</option></select><select id="va"><option value="">Any validation</option></select><span id="n" class="sub"></span></div>
+<div class="tw"><table><thead><tr><th data-k="year">Year</th><th data-k="first_author">Paper</th><th>Cohort and method</th><th>Findings</th><th>Why it matters to us</th></tr></thead><tbody id="tb"></tbody></table></div>
+</main><script>
+const P=__DATA__, MAP=__MAP__; const $=s=>document.querySelector(s); let sortK="year",dir=-1,yr=null;
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("#map").textContent=MAP||"No field_map.md yet."; $("#sub").textContent=P.length+" papers · "+P.filter(p=>p.verified==="pubmed").length+" checked on PubMed";
+const uniq=k=>[...new Set(P.flatMap(p=>Array.isArray(p[k])?p[k]:[p[k]]).filter(Boolean))].sort();
+for(const [id,k] of [["#th","themes"],["#ty","type"],["#va","validation"]]) for(const v of uniq(k)) $(id).insertAdjacentHTML("beforeend",`<option>${esc(v)}</option>`);
+const ys={}; P.forEach(p=>ys[p.year]=(ys[p.year]||0)+1); const mx=Math.max(...Object.values(ys));
+$("#years").innerHTML=Object.keys(ys).sort().map(y=>`<div data-y="${y}" title="${y}: ${ys[y]}" style="height:${ys[y]/mx*100}%"><span>${String(y).slice(2)}</span></div>`).join("");
+$("#years").onclick=e=>{const y=e.target.closest("div[data-y]");yr=y&&yr!=y.dataset.y?y.dataset.y:null;draw()};
+function draw(){const q=$("#q").value.toLowerCase(),th=$("#th").value,ty=$("#ty").value,va=$("#va").value;
+ const rows=P.filter(p=>(!q||JSON.stringify(p).toLowerCase().includes(q))&&(!th||(p.themes||[]).includes(th))&&(!ty||p.type===ty)&&(!va||(p.validation||[]).includes(va))&&(!yr||String(p.year)===yr))
+  .sort((a,b)=>(String(a[sortK])>String(b[sortK])?1:-1)*dir);
+ $("#n").textContent=rows.length+" shown"+(yr?" · "+yr:"");
+ $("#tb").innerHTML=rows.map(p=>{const link=p.pmid?`https://pubmed.ncbi.nlm.nih.gov/${esc(p.pmid)}/`:(p.doi?`https://doi.org/${esc(p.doi)}`:"");
+  return `<tr><td>${esc(p.year)}</td><td><div class="t">${link?`<a href="${link}" target="_blank" rel="noopener">`:""}${esc(p.first_author)} … ${esc(p.last_author)}${link?"</a>":""}</div>${esc(p.title)}<br><i>${esc(p.journal)}</i> <span class="c">${esc(p.type)}</span>${p.verified!=="pubmed"?`<span class="c u">${esc(p.verified||"unverified")}</span>`:""}</td>
+  <td>${esc(p.cohort)}<br>${(p.modality||[]).map(m=>`<span class="c">${esc(m)}</span>`).join("")}<br>${(p.validation||[]).map(m=>`<span class="c">${esc(m)}</span>`).join("")}</td>
+  <td class="f">${(p.findings||[]).map(f=>"• "+esc(f)).join("<br>")}</td><td>${esc(p.relevance)}<br>${(p.themes||[]).map(m=>`<span class="c">${esc(m)}</span>`).join("")}</td></tr>`}).join("");}
+document.querySelectorAll("th[data-k]").forEach(t=>t.onclick=()=>{dir=sortK===t.dataset.k?-dir:1;sortK=t.dataset.k;draw()});
+["#q","#th","#ty","#va"].forEach(i=>$(i).oninput=draw); draw();
+</script></body></html>

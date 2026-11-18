@@ -1,0 +1,45 @@
+name: cell-statistics
+version: 0.1.0
+description: >
+  Declarative manifest for the Cell statistics-reporting workflow. SKILL.md uses
+  it to keep the always-needed rules small and to load the specialised
+  checklists only when the manuscript section, legend or reviewer comment
+  needs them.
+
+# Adapted in structure from nature-skills (nature-statistics/manifest.yaml),
+# Apache-2.0. Cell rules come only from cell-shared/journal-formats/cell.md.
+#
+# Design note: this is a conservative reporting/audit skill. The default path
+# needs the rule/guidance boundary and the minimum reporting set. The heavier
+# catalogues stay on demand so a single legend fix does not load everything.
+
+journal_format: ../cell-shared/journal-formats/cell.md
+
+always_load:
+  - references/source-basis.md
+  - references/statistical-reporting.md
+
+stage_gate:
+  first_submission: report legend and STAR Methods gaps as "needed at revision" (cell.md section 1)
+  revision: legend statistics (cell.md section 4) and STAR Methods format (cell.md section 8) are required
+  final: same as revision
+
+references:
+  on_demand:
+    - condition: checking or writing figure legends, panel-level n, asterisks, error bars, box/violin plots, "See also Figure S"
+      path: references/figure-statistics.md
+    - condition: drafting or auditing the STAR Methods section "Quantification and statistical analysis", or legends and methods disagree
+      path: references/quantification-and-statistical-analysis.md
+    - condition: single-cell, single-nucleus, spatial, imaging or other data where the measured unit (cell, spot, pixel, field) is nested in the biological unit (patient, animal, section); genome-wide testing
+      path: references/omics-and-spatial.md
+    - condition: nested data, repeated measures, many comparisons, correlation or regression claims, outliers, small samples, or overstrong p-value language
+      path: references/common-failure-modes.md
+    - condition: final audit QA, severity labels, reviewer-risk summary, or support for a response to reviewers
+      path: references/reviewer-checklist.md
+
+quality_tools:
+  legend_stats_script: scripts/legend_stats_check.py
+  use_when: after legends are drafted, after any figure or panel change, and before a revision is submitted
+  purpose: flag, per legend, a missing test name, undefined asterisks, missing n, n given only in cells/spots, undefined error bars, missing "See also Figure S" (main) or "related to Figure N" (supplemental)
+  limits: text lint only; cannot see the image; does not judge whether the test fits the design
+  script_resolution: resolve relative to the loaded SKILL.md directory, never the user working directory

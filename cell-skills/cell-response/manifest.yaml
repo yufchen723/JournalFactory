@@ -1,0 +1,71 @@
+name: cell-response
+version: 0.1.0
+description: >
+  Declarative manifest for the Cell reviewer-response skill. SKILL.md uses it
+  to decide which core files, references and templates to load for a revision
+  plan, a point-by-point response, a revision cover letter or a package audit.
+
+# Adapted in structure from nature-skills (nature-response/manifest.yaml),
+# Apache-2.0. Cell rules come only from cell-shared/journal-formats/cell.md.
+#
+# Design note: the workflow is linear (intake -> extract items -> classify ->
+# map actions -> plan -> draft -> locate -> audit). Variation (task mode,
+# decision, how much work is done) is identified at run time, mainly by
+# references/intake-and-routing.md, not by loading different content bodies.
+# There is no content axis: core (always loaded) plus on-demand references.
+
+journal_format: ../cell-shared/journal-formats/cell.md
+
+always_load:
+  - static/core/stance.md
+  - static/core/workflow.md
+
+modes:
+  - triage-only
+  - plan
+  - draft
+  - audit
+  - revise
+  - cover-letter
+  - revision-package
+  - appeal-like
+
+references:
+  on_demand:
+    - condition: fix the task mode, read the decision letter, check minimum inputs, assign editor and reviewer IDs, set readiness, decide whether to ask a question
+      path: references/intake-and-routing.md
+    - condition: classify comments by category and severity
+      path: references/comment-taxonomy.md
+    - condition: choose action labels, work status, tracker fields, blocking state; rank requested experiments
+      path: references/action-mapping.md
+    - condition: anatomy of the point-by-point response and the revision cover letter; what Cell requires at revision; how changes are located
+      path: references/response-structure.md
+    - condition: wording, disagreement, phrases to avoid, a reviewer missed something that is already in the manuscript
+      path: references/tone-and-stance.md
+    - condition: infeasible experiments, conflicting reviewers, factual errors by a reviewer, requests to cite, statistics disputes, scope expansion, appeal-like cases
+      path: references/difficult-cases.md
+    - condition: the manuscript changed (figures or panels added, moved or renumbered; text added) or the package is about to be delivered
+      path: references/package-consistency-audit.md
+    - condition: before finalizing any output or auditing a draft response
+      path: references/qa-checklist.md
+
+templates:
+  revision_plan: templates/revision_plan.md
+  point_by_point: templates/point_by_point.md
+  revision_cover_letter: templates/revision_cover_letter.md
+
+examples:
+  - examples/major-revision-example.md
+
+related_skills:
+  statistics_comments: ../cell-statistics
+  data_and_resource_comments: ../cell-data
+  reference_changes: ../cell-citation
+  pre_submission_self_review: ../cell-reviewer
+
+quality_tools:
+  response_package_script: scripts/check_response_package.py
+  use_when: after the first complete response draft, after every figure renumbering, and immediately before delivery
+  purpose: confirm each comment block has a response and a manuscript location, find figure/panel/table references absent from the manuscript legends, list promises to resolve
+  limits: Markdown input; mechanical only; does not check word counts or whether a response is adequate
+  script_resolution: resolve relative to the loaded SKILL.md directory, never the user working directory

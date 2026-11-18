@@ -1,0 +1,8 @@
+# key<TAB>PubMed query. One line per question you want the field to answer. Lines starting with # are skipped.
+# Keep queries narrow (20-40 hits each); a paper found by several queries ranks first in candidates.tsv.
+# Replace <disease or system> with your own terms.
+landmarks	<disease or system>[ti] AND (atlas[tiab] OR landscape[tiab]) AND 2019:2026[dp]
+states	<disease or system>[ti] AND (single-cell[tiab] OR single-nucleus[tiab]) AND (cell states[tiab] OR plasticity[tiab]) AND 2019:2026[dp]
+spatial	<disease or system>[tiab] AND (spatial transcriptomics[tiab] OR spatially resolved[tiab] OR spatial multi-omics[tiab]) AND 2021:2026[dp]
+regulation	<disease or system>[tiab] AND (ATAC[tiab] OR chromatin accessibility[tiab] OR gene regulatory network[tiab]) AND 2019:2026[dp]
+function	<disease or system>[tiab] AND (organoid[tiab] OR perturbation[tiab] OR CRISPR[tiab]) AND 2020:2026[dp]

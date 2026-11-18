@@ -1,0 +1,222 @@
+{
+ "id": "cell",
+ "name": "Cell",
+ "publisher": "Cell Press",
+ "family": "cell-press",
+ "article_type": "Article",
+ "tier": 1,
+ "scope": "Complete stories of broad biological interest with mechanism; resource papers need exceptional scale or a new principle.",
+ "limits": {
+  "main_display_items": 7,
+  "main_text_words": 7000,
+  "main_text_counts": "under 7,000 words including main figure legends; excludes STAR Methods text, supplemental item legends, references",
+  "abstract_words": 150,
+  "highlights": {
+   "n": 4,
+   "chars": 85
+  },
+  "etoc_words": 50,
+  "references": null,
+  "supplemental_figures": null,
+  "title_chars": 145,
+  "keywords": 10,
+  "etoc_sentences": 2,
+  "supplemental_figures_recommended": 20
+ },
+ "figure": {
+  "widths_mm": {
+   "single": 85,
+   "mid": 114,
+   "double": 174
+  },
+  "max_height_mm": 279.4,
+  "recommended_max_mm": [
+   165,
+   200
+  ],
+  "font_family": [
+   "Arial"
+  ],
+  "font_pt": {
+   "min": 6,
+   "max": 8
+  },
+  "panel_label": {
+   "case": "upper",
+   "pt": 8,
+   "bold": true,
+   "note": "capital letters are the Cell rule; 8 pt bold is house style"
+  },
+  "line_pt": {
+   "min": 0.5,
+   "max": 1.5
+  },
+  "dpi": {
+   "photo": 300,
+   "black_white": 500,
+   "line_art": 1000
+  },
+  "color": "RGB",
+  "formats": [
+   "TIFF",
+   "PDF"
+  ],
+  "max_file_mb": 20,
+  "notes": [
+   "One file per main figure with all panels; titles and legends stay in the manuscript.",
+   "Use only Arial; always embed fonts; flatten to one layer.",
+   "Red and green should not be used together.",
+   "Scale bar on every microscopy image; plot individual data points with means (recommended).",
+   "No generative or AI-assisted creation or alteration of research images, including brightness/contrast/colour balance.",
+   "Production rules: at first submission any format, size and resolution is accepted (keep files 1-2 MB)."
+  ],
+  "max_height_note": "Cell: each figure must fit one page; recommended maximum 165 x 200 mm",
+  "formats_accepted": [
+   "EPS",
+   "JPEG",
+   "PSD",
+   "PNG",
+   "CDX"
+  ],
+  "gray_fill": {
+   "lightest_pct_black": 10,
+   "darkest_pct_black": 80,
+   "min_step_pct": 20
+  },
+  "graphical_abstract": {
+   "px": 1200,
+   "dpi": 300,
+   "font": "Arial",
+   "font_pt": {
+    "min": 8,
+    "max": 12
+   },
+   "formats": [
+    "TIFF",
+    "PDF",
+    "JPG"
+   ],
+   "no_data_items": true,
+   "general_purpose_generative_ai": "not allowed"
+  }
+ },
+ "sections": [
+  "Title",
+  "Authors and affiliations",
+  "Contact information",
+  "Summary",
+  "Keywords",
+  "Introduction",
+  "Results",
+  "Discussion",
+  "Limitations of the study",
+  "Resource availability",
+  "Acknowledgments",
+  "Author contributions",
+  "Declaration of interests",
+  "Declaration of generative AI and AI-assisted technologies",
+  "Supplemental information",
+  "Figure legends",
+  "Tables",
+  "STAR Methods",
+  "References"
+ ],
+ "front_matter": [
+  "Summary (one paragraph, <=150 words, no citations)",
+  "Keywords (<=10)",
+  "Highlights (<=4, <=85 characters with spaces, no abbreviations)",
+  "eTOC blurb (<=50 words, 2 sentences, third person)",
+  "Graphical abstract (required; 1200x1200 px at 300 dpi, Arial 8-12 pt, no data items)"
+ ],
+ "methods": {
+  "name": "STAR Methods",
+  "order": [
+   "Key resources table",
+   "Experimental model and study participant details",
+   "Method details",
+   "Quantification and statistical analysis"
+  ],
+  "word_limit": null
+ },
+ "supplemental": {
+  "figures": "Figure S1... each titled 'related to Figure N'; <=20 recommended; may span pages",
+  "tables": "Table S (Excel when longer than 3 pages)",
+  "primary_pdf": "Document S1: A4/Letter, <=50 MB, Arial 10 pt; no methods (they belong in STAR Methods)",
+  "max_file_mb": 500
+ },
+ "citation_style": "numbered superscript",
+ "extras": [
+  "Key Resources Table",
+  "Lead contact",
+  "Data and code availability with accession numbers",
+  "Inclusion and diversity statement (optional)",
+  "Declaration of generative AI use"
+ ],
+ "bar": {
+  "concept": 3,
+  "technology": 2,
+  "scale": 2,
+  "orthogonal": 3,
+  "replication": 2,
+  "function": 3,
+  "clinical": 1,
+  "resource": 2
+ },
+ "verified": {
+  "level": "official",
+  "date": "2026-11-18",
+  "note": "Read on cell.com in a browser (the site refuses automated fetches): figure guidelines, article types, revise-manuscript, final-submission, supplemental information, graphical abstract guide pages 1-2. Not read: STAR Methods author guide PDF (section headings unconfirmed), journal-policies page, final file requirements PDF. Full digest: cell-skills/cell-shared/journal-formats/cell.md."
+ },
+ "sources": [
+  {
+   "url": "https://www.cell.com/information-for-authors/figure-guidelines",
+   "status": "read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/cell/information-for-authors/article-types",
+   "status": "read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/cell/information-for-authors/revise-manuscript",
+   "status": "read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/cell/information-for-authors/final-submission",
+   "status": "read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/information-for-authors/supplemental-information",
+   "status": "read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "Cell Press graphical abstract guidelines (PDF linked from final-submission)",
+   "status": "read pages 1-2",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/information-for-authors/star-authors-guide",
+   "status": "landing page read; author guide PDF not read",
+   "date": "2026-11-18"
+  },
+  {
+   "url": "https://www.cell.com/cell/information-for-authors/journal-policies",
+   "status": "not-read",
+   "date": "2026-11-18"
+  }
+ ],
+ "skills": [
+  "cell-skills (Journal Factory's own: cell-figure, cell-writing, cell-statistics, cell-reviewer, cell-response, cell-data, cell-citation, cell-shared)",
+  "vendor/cell-skills/skills",
+  "vendor/k-dense/venue-templates",
+  "vendor/k-dense/scientific-visualization"
+ ],
+ "references": {
+  "style": "numbered superscript; Author, A., and Author, B. (year). Title. Journal vol, pages. DOI.",
+  "et_al_after_authors": 10
+ }
+}

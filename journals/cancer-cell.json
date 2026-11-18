@@ -1,0 +1,138 @@
+{
+ "id": "cancer-cell",
+ "name": "Cancer Cell",
+ "publisher": "Cell Press",
+ "family": "cell-press",
+ "article_type": "Article",
+ "tier": 2,
+ "scope": "Cancer biology with translational reach; large clinical cohorts or a functional model.",
+ "limits": {
+  "main_display_items": 7,
+  "main_text_words": 7000,
+  "abstract_words": 150,
+  "highlights": {
+   "n": 4,
+   "chars": 85
+  },
+  "etoc_words": 50,
+  "references": null
+ },
+ "figure": {
+  "widths_mm": {
+   "single": 85,
+   "mid": 114,
+   "double": 174
+  },
+  "max_height_mm": 225,
+  "recommended_max_mm": [
+   165,
+   200
+  ],
+  "font_family": [
+   "Arial"
+  ],
+  "font_pt": {
+   "min": 6,
+   "max": 8
+  },
+  "panel_label": {
+   "case": "upper",
+   "pt": 8,
+   "bold": true
+  },
+  "line_pt": {
+   "min": 0.5,
+   "max": 1.5
+  },
+  "dpi": {
+   "photo": 300,
+   "black_white": 500,
+   "line_art": 1000
+  },
+  "color": "RGB",
+  "formats": [
+   "TIFF",
+   "PDF"
+  ],
+  "max_file_mb": 20,
+  "notes": [
+   "One file per main figure with all panels; legends stay in the manuscript.",
+   "Embed fonts.",
+   "Do not use red and green as the only distinction.",
+   "No generative-AI alteration of research images."
+  ]
+ },
+ "sections": [
+  "Title",
+  "Authors and affiliations",
+  "Summary",
+  "Keywords",
+  "Introduction",
+  "Results",
+  "Discussion",
+  "Limitations of the study",
+  "Resource availability",
+  "Acknowledgments",
+  "Author contributions",
+  "Declaration of interests",
+  "Figure legends",
+  "STAR Methods",
+  "Supplemental information",
+  "References"
+ ],
+ "front_matter": [
+  "Summary (<=150 words)",
+  "Highlights (<=4, <=85 characters)",
+  "eTOC blurb (<=50 words)",
+  "Graphical abstract (1200x1200 px, 300 dpi)"
+ ],
+ "methods": {
+  "name": "STAR Methods",
+  "order": [
+   "Key resources table",
+   "Experimental model and study participant details",
+   "Method details",
+   "Quantification and statistical analysis"
+  ],
+  "word_limit": null
+ },
+ "supplemental": {
+  "figures": "Figure S (each tied to a main figure)",
+  "tables": "Table S (Excel)"
+ },
+ "citation_style": "numbered superscript",
+ "extras": [
+  "Key Resources Table",
+  "Lead contact",
+  "Data and code availability with accession numbers",
+  "Inclusion and diversity statement (optional)",
+  "Declaration of generative AI use"
+ ],
+ "bar": {
+  "concept": 2,
+  "technology": 1,
+  "scale": 2,
+  "orthogonal": 2,
+  "replication": 2,
+  "function": 2,
+  "clinical": 2,
+  "resource": 2
+ },
+ "verified": {
+  "level": "secondary",
+  "note": "Third-party guide only; confirm on cell.com."
+ },
+ "sources": [
+  {
+   "url": "https://www.cell.com/cancer-cell/information-for-authors",
+   "status": "not-read",
+   "date": "2026-11-18"
+  }
+ ],
+ "skills": [
+  "vendor/cancer-cell-skills/skills",
+  "vendor/cell-skills/skills",
+  "vendor/k-dense/venue-templates",
+  "vendor/k-dense/scientific-visualization"
+ ]
+}

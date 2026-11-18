@@ -1,0 +1,7 @@
+{"pmid": "", "doi": "", "first_author": "", "last_author": "", "year": 0, "journal": "", "title": "",
+ "type": "primary | method | resource | review | preprint",
+ "modality": [], "cohort": "n patients / samples, tumour type",
+ "question": "one line", "findings": ["1-3 sentences from the abstract or full text, with numbers"],
+ "validation": ["orthogonal-imaging | external-cohort | functional-in-vitro | organoid | in-vivo | clinical-outcome | none"],
+ "themes": [], "relevance": "why it matters for our paper: supports / competes / sets the bar / method we use",
+ "read_depth": "abstract | full-text", "verified": "pubmed | web | unverified"}

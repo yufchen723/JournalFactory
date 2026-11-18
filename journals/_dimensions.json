@@ -1,0 +1,13 @@
+{
+ "dimensions": {
+  "concept": "new biological principle (0 none, 1 confirms, 2 extends, 3 new principle)",
+  "technology": "new or enabling method (0-3)",
+  "scale": "cohort and data scale for the field (0-3)",
+  "orthogonal": "independent modality at single-cell resolution or protein level (0 none, 1 external data only, 2 same tissue, 3 same tissue + quantified)",
+  "replication": "independent cohort replication of the main claims (0-3)",
+  "function": "perturbation evidence (0 none, 1 in silico, 2 in vitro / organoid, 3 organoid or in vivo with mechanism)",
+  "clinical": "outcome or treatment relevance (0-3)",
+  "resource": "reusable data, model, code (0-3)"
+ },
+ "note": "Bars are Claude's reading of recently published comparators, not journal policy. Edit them when a field scan says otherwise."
+}
