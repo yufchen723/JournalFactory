@@ -369,6 +369,9 @@ def main():
     p.add_argument("--figures", type=int, default=7); p.add_argument("--supp", type=int, default=0); p.set_defaults(f=cmd_paper)
     p = sp.add_parser("cell"); p.add_argument("tool"); p.add_argument("rest", nargs=argparse.REMAINDER); p.set_defaults(f=cmd_cell)
     sp.add_parser("doctor").set_defaults(f=cmd_doctor)
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import jf_adapt
+    jf_adapt.register(sp)
     if len(sys.argv) > 1 and sys.argv[1] == "cartoon":
         sys.exit(subprocess.call([str(HOME / "bin" / "jf-cartoon")] + sys.argv[2:]))
     if len(sys.argv) > 1 and sys.argv[1] == "studio":

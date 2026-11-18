@@ -39,6 +39,11 @@ CELL = {
     "max_file_mb": 20.0,
     "gray_fill": {"lightest": 0.10, "darkest": 0.80, "min_step": 0.20},
     "ga": {"px": 1200, "dpi": 300, "text_pt": (8.0, 12.0)},
+    # the four keys below let Journal Factory point this module at another journal (configure())
+    "name": "Cell",
+    "label_case": "upper",
+    "fonts": ["Arial"],
+    "rules": {"red_green": True, "gray_fill": True},
 }
 
 # --- HOUSE choices (not Cell rules) -----------------------------------------------------
@@ -91,6 +96,45 @@ def load_profile(path: str | Path | None = None) -> dict:
     return CELL
 
 
+def configure(profile: dict) -> dict:
+    """Point this module (and the file audit) at another journal's profile (journals/<id>.json).
+
+    Used by Journal Factory's scripts/journal_style.py. Cell stays the default; nothing here
+    runs unless it is called. Values a profile does not state keep their current value.
+    """
+    F = profile["figure"]
+    W = {k: float(v) for k, v in F["widths_mm"].items()}
+    full = W.get("double") or max(W.values())
+    CELL["widths_mm"] = {"single": W.get("single", min(W.values())), "full": full}
+    if "mid" in W:
+        CELL["widths_mm"]["mid"] = W["mid"]
+    CELL["text_pt"] = (float(F["font_pt"]["min"]), float(F["font_pt"]["max"]))
+    CELL["stroke_pt"] = (float(F["line_pt"]["min"]), float(F["line_pt"]["max"]))
+    d = F.get("dpi", {})
+    photo = int(d.get("photo", 300)); line = int(d.get("line_art", 600))
+    CELL["dpi"] = {"colour": photo, "grayscale": photo, "bw": int(d.get("black_white", line)), "lineart": line}
+    CELL["max_file_mb"] = float(F.get("max_file_mb", 1e9))   # 1e9 = the profile states no limit
+    rec = F.get("recommended_max_mm")
+    CELL["recommended_max_mm"] = (float(rec[0]), float(rec[1])) if rec else (full, float(F.get("max_height_mm", 247)))
+    CELL["name"] = profile.get("name", profile.get("id", "journal"))
+    CELL["label_case"] = F.get("panel_label", {}).get("case", "upper")
+    CELL["fonts"] = list(F.get("font_family") or ["Arial"])
+    CELL["rules"] = {"red_green": True, "gray_fill": "gray_fill" in F}
+    lo, hi = CELL["text_pt"]
+    HOUSE["base_pt"] = min(max(7.0, lo), hi)
+    HOUSE["tick_pt"] = min(max(6.0, lo), HOUSE["base_pt"])
+    HOUSE["label_pt"] = float(F.get("panel_label", {}).get("pt", 8))
+    slo, shi = CELL["stroke_pt"]
+    HOUSE["axis_lw"] = min(max(0.5, slo), shi)
+    HOUSE["data_lw"] = min(max(1.0, slo), shi)
+    try:
+        import validate_cell_figure as v
+        v.configure(profile)
+    except ImportError:
+        pass
+    return CELL
+
+
 def arial_available() -> bool:
     from matplotlib import font_manager as fm
     return any(f.name == "Arial" for f in fm.fontManager.ttflist)
@@ -103,12 +147,12 @@ def use_cell_style(base_pt: float | None = None, quiet: bool = False) -> dict:
     base = float(base_pt or HOUSE["base_pt"])
     lo, hi = CELL["text_pt"]
     if not lo <= base <= hi:
-        raise ValueError(f"base_pt {base} is outside Cell's {lo:g}-{hi:g} pt")
+        raise ValueError(f"base_pt {base} is outside {CELL['name']}'s {lo:g}-{hi:g} pt")
     tick = max(lo, min(base, HOUSE["tick_pt"]))
     if not arial_available() and not quiet:
         warnings.warn(
             "Arial is not installed: the figure is drawn in a metric-compatible fallback "
-            "(Liberation Sans). Cell asks for Arial only; re-export on a machine with Arial "
+            f"(Liberation Sans). {CELL['name']} asks for {' or '.join(CELL['fonts'])}; re-export on a machine with Arial "
             "before the production upload.", stacklevel=2)
     mpl.rcParams.update({
         "font.family": "sans-serif",
@@ -150,7 +194,7 @@ def width_mm(width: str | float) -> float:
         return CELL["widths_mm"][key]
     w = float(width)
     if w > CELL["widths_mm"]["full"] + 1e-6:
-        raise ValueError(f"width {w} mm is wider than Cell's full page width ({CELL['widths_mm']['full']} mm)")
+        raise ValueError(f"width {w} mm is wider than {CELL['name']}'s full page width ({CELL['widths_mm']['full']} mm)")
     return w
 
 
@@ -164,7 +208,7 @@ def cell_figure(width: str | float = "full", height_mm: float = 100.0, nrows: in
     w = width_mm(width)
     rec_w, rec_h = CELL["recommended_max_mm"]
     if height_mm > rec_h:
-        warnings.warn(f"height {height_mm:g} mm is above Cell's recommended {rec_h:g} mm; the legend may not fit under the figure", stacklevel=2)
+        warnings.warn(f"height {height_mm:g} mm is above {CELL['name']}'s recommended {rec_h:g} mm; the legend may not fit under the figure", stacklevel=2)
     if w > rec_w:
         # full width (174) is allowed; 165 is the recommendation that leaves room for margins
         pass
@@ -188,8 +232,10 @@ def panel_label(ax, letter: str, dx_pt: float = -22.0, dy_pt: float = 4.0, size:
     from matplotlib.transforms import ScaledTranslation
 
     letter = str(letter)
-    if not letter.isupper():
-        raise ValueError(f"Cell panel labels are capital letters (got {letter!r})")
+    if CELL["label_case"] == "upper" and not letter.isupper():
+        raise ValueError(f"{CELL['name']} panel labels are capital letters (got {letter!r})")
+    if CELL["label_case"] == "lower":
+        letter = letter.lower()
     fig = ax.figure
     tr = ax.transAxes + ScaledTranslation(dx_pt / 72, dy_pt / 72, fig.dpi_scale_trans)
     t = ax.text(0, 1, letter, transform=tr, fontsize=size or HOUSE["label_pt"], fontweight="bold",
@@ -202,8 +248,8 @@ def panel_label(ax, letter: str, dx_pt: float = -22.0, dy_pt: float = 4.0, size:
 def label_panels(axes, letters: str | None = None, **kw):
     """Label axes in reading order with A, B, C ... (pass a dict from cell_mosaic to use its keys)."""
     if isinstance(axes, dict):
-        return {k: panel_label(ax, k, **kw) for k, ax in axes.items() if str(k).isupper()}
-    letters = letters or string.ascii_uppercase
+        return {k: panel_label(ax, k, **kw) for k, ax in axes.items() if str(k).isalpha() and (str(k).isupper() or CELL["label_case"] == "lower")}
+    letters = letters or (string.ascii_lowercase if CELL["label_case"] == "lower" else string.ascii_uppercase)
     return [panel_label(ax, letters[i], **kw) for i, ax in enumerate(axes)]
 
 
@@ -399,7 +445,8 @@ def style_report(fig) -> dict:
     findings = []
     texts = _visible_texts(fig)
     small = sorted({round(t.get_fontsize(), 2) for t in texts if t.get_fontsize() < lo - 0.01})
-    big = sorted({round(t.get_fontsize(), 2) for t in texts if t.get_fontsize() > hi + 0.01})
+    big = sorted({round(t.get_fontsize(), 2) for t in texts if t.get_fontsize() > hi + 0.01
+                  and not str(t.get_gid() or "").startswith("panel-label-")})   # panel letters have their own size rule
     if small:
         findings.append(f"text below {lo:g} pt: {small}")
     if big:
@@ -415,7 +462,7 @@ def style_report(fig) -> dict:
     labels = [t.get_text() for t in fig.findobj(Text) if str(t.get_gid() or "").startswith("panel-label-")]
     if len(_data_axes(fig)) > 1 and not labels:
         findings.append("multi-panel figure without panel letters (use label_panels)")
-    if labels and sorted(labels) != list(string.ascii_uppercase[:len(labels)]):
+    if labels and sorted(x.upper() for x in labels) != list(string.ascii_uppercase[:len(labels)]):
         findings.append(f"panel letters are not a continuous A.. sequence: {sorted(labels)}")
     cols = set()
     for ax in fig.axes:
@@ -430,10 +477,10 @@ def style_report(fig) -> dict:
                 pass
     try:
         if red_green_clash(cols):
-            findings.append("red and green are used together (Cell: avoid); change one of them")
+            findings.append("red and green are used together (" + ("Cell: avoid" if CELL["name"] == "Cell" else "hard for colour-blind readers") + "); change one of them")
     except Exception:
         pass
-    return {"check": "Cell style", "verdict": "REVIEW" if findings else "PASS", "findings": findings}
+    return {"check": f"{CELL['name']} style", "verdict": "REVIEW" if findings else "PASS", "findings": findings}
 
 
 def run_gates(fig, tol_pt: float = 1.5) -> list[dict]:
@@ -478,7 +525,7 @@ def save_cell(fig, stem: str | Path, formats=("pdf", "tiff"), kind: str = "colou
             fig.savefig(f, dpi=max(600, dpi))   # dpi here only sets the resolution of rasterised layers
         mb = f.stat().st_size / 1e6
         if mb > CELL["max_file_mb"]:
-            warnings.warn(f"{f.name} is {mb:.1f} MB; Cell's limit is {CELL['max_file_mb']:g} MB per figure")
+            warnings.warn(f"{f.name} is {mb:.1f} MB; {CELL['name']}'s limit is {CELL['max_file_mb']:g} MB per figure")
         out["files"].append({"path": str(f), "mb": round(mb, 2)})
     if preview and not any(str(x["path"]).endswith(".png") for x in out["files"]):
         p = stem.parent / f"{stem.name}.preview.png"

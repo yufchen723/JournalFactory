@@ -66,7 +66,46 @@ def _load_profile() -> None:
 _load_profile()
 
 
+JOURNAL = "Cell"
+RULES = {"gray_fill": True}
+
+
+def configure(profile: dict) -> None:
+    """Audit against another journal's profile (journals/<id>.json). Cell stays the default."""
+    global TEXT_PT, STROKE_PT, MAX_MB, REC_MAX_MM, PAGE_MAX_MM, TEXT_HARD_FLOOR, ARIAL, JOURNAL, PREFERRED, ACCEPTED
+    Fg = profile["figure"]; W = {k: float(v) for k, v in Fg["widths_mm"].items()}
+    WIDTHS_MM.clear()
+    WIDTHS_MM["1 column"] = W.get("single", min(W.values()))
+    if "mid" in W:
+        WIDTHS_MM["1.5 columns"] = W["mid"]
+    WIDTHS_MM["full width"] = W.get("double") or max(W.values())
+    # panel letters may be larger than body text (Nature: 8 pt bold letters, 5-7 pt text)
+    TEXT_PT = (float(Fg["font_pt"]["min"]), max(float(Fg["font_pt"]["max"]), float(Fg.get("panel_label", {}).get("pt", 0))))
+    TEXT_HARD_FLOOR = min(5.0, TEXT_PT[0])
+    STROKE_PT = (float(Fg["line_pt"]["min"]), float(Fg["line_pt"]["max"]))
+    d = Fg.get("dpi", {}); photo = int(d.get("photo", 300)); line = int(d.get("line_art", 600))
+    DPI.update({"colour": photo, "grayscale": photo, "bw": int(d.get("black_white", line)), "lineart": line})
+    MAX_MB = float(Fg.get("max_file_mb", 1e9))   # 1e9 = the profile states no limit
+    PAGE_MAX_MM = float(Fg.get("max_height_mm", PAGE_MAX_MM))
+    rec = Fg.get("recommended_max_mm")
+    REC_MAX_MM = (float(rec[0]), float(rec[1])) if rec else (WIDTHS_MM["full width"], PAGE_MAX_MM)
+    fonts = [re.sub(r"[^a-z]", "", f.lower()) for f in (Fg.get("font_family") or ["Arial"])]
+    ARIAL = re.compile("|".join(fonts) or "arial", re.I)
+    JOURNAL = profile.get("name", profile.get("id", "journal"))
+    RULES["gray_fill"] = "gray_fill" in Fg
+    ext = {"tiff": (".tif", ".tiff"), "tif": (".tif", ".tiff"), "pdf": (".pdf",), "eps": (".eps",), "ai": (".ai",), "jpeg": (".jpg", ".jpeg"), "jpg": (".jpg", ".jpeg"), "png": (".png",), "psd": (".psd",), "svg": (".svg",)}
+    pref = tuple(e for f in Fg.get("formats", []) for e in ext.get(f.split()[0].lower(), ()))
+    if pref:
+        PREFERRED = pref
+        ACCEPTED = tuple(dict.fromkeys(pref + tuple(e for f in Fg.get("formats_accepted", ["EPS", "JPEG", "PNG", "TIFF", "PDF"]) for e in ext.get(f.split()[0].lower(), ()))))
+
+
 def F(level: str, check: str, msg: str) -> dict:
+    if JOURNAL != "Cell":   # Cell wording is the default; other journals get neutral wording
+        msg = msg.replace("(limit 1e+09 MB per figure)", "(the profile states no per-file limit)")
+        msg = msg.replace("(Cell: do not use them together)", "(hard for colour-blind readers)").replace("(Cell suggests LZW to keep the file small)", "(LZW keeps the file small)")
+        msg = msg.replace("is not a Cell production format (TIFF, PDF, EPS, JPEG, PSD, PNG)", f"is not in {JOURNAL}'s format list").replace("TIFF and PDF are preferred", f"{JOURNAL} prefers " + ", ".join(sorted({e[1:].upper() for e in PREFERRED})))
+        msg = msg.replace("(Cell: use only Arial)", f"({JOURNAL}: {ARIAL.pattern.replace('|', ' or ')})").replace("Cell", JOURNAL)
     return {"level": level, "check": check, "message": msg}
 
 
@@ -325,7 +364,7 @@ def _hue(c) -> str | None:
 def _gray_findings(fills) -> list[dict]:
     grays = sorted({round(1 - c[0], 2) for c in fills if abs(c[0] - c[1]) < 0.01 and abs(c[1] - c[2]) < 0.01 and 0.005 < c[0] < 0.995})
     out = []
-    if not grays:
+    if not grays or not RULES["gray_fill"]:
         return out
     light = [g for g in grays if g < 0.10 - 1e-6]; dark = [g for g in grays if g > 0.80 + 1e-6]
     close = [(a, b) for a, b in zip(grays, grays[1:]) if b - a < 0.20 - 1e-6]
