@@ -1,16 +1,16 @@
-# PaperFactory
+# JournalFactory
 
-Take a biology project from data to a submitted paper with Claude. Tell it what you have; PaperFactory learns the field from its papers, picks the journal from the evidence, plans the story and every figure, then helps you draw the figures and write the text to that journal's own rules, with a script that checks each rule and says where the rule comes from.
+Take a biology project from data to a submitted paper with Claude. Tell it what you have; JournalFactory learns the field from its papers, picks the journal from the evidence, plans the story and every figure, then helps you draw the figures and write the text to that journal's own rules, with a script that checks each rule and says where the rule comes from.
 
-![PaperFactory overview](docs/overview.png)
+![JournalFactory overview](docs/overview.png)
 
 **Top:** the nine stages. Claude says which stage a request belongs to and opens only that guide. **Left:** a full-width Cell figure built from the bundled templates (simulated data). **Right:** what the checks print (example output): figure files, manuscript text and journal fit.
 
-The skill inside is called **Journal Factory** (`journal-factory`); the command line is `jf`. [中文说明](README.zh-CN.md)
+Claude knows it as the `journal-factory` skill; the command line is `jf`. [中文说明](README.zh-CN.md)
 
 ## What you get
 
-- **A field map before you write.** PaperFactory searches PubMed and Europe PMC with your queries, reads the papers into paper cards, checks every reference, and writes one page: what is known, what is argued about, which of your claims are open, extended or already taken.
+- **A field map before you write.** JournalFactory searches PubMed and Europe PMC with your queries, reads the papers into paper cards, checks every reference, and writes one page: what is known, what is argued about, which of your claims are open, extended or already taken.
 - **A journal chosen by evidence, not by wish.** Thirteen journal profiles (Cell, Nature, Nature Genetics, Nature Cancer, Cancer Cell, Nature Communications and others). Your results are scored on eight dimensions and compared with each journal's bar, under three scenarios:
 
   | Scenario | Question it answers |
@@ -86,7 +86,7 @@ bin/jf cell demo out/          # six-panel figure from simulated data, with the 
 **Claude Code:**
 
 ```bash
-git clone https://github.com/yufchen723/PaperFactory ~/.claude/skills/journal-factory
+git clone https://github.com/yufchen723/JournalFactory ~/.claude/skills/journal-factory
 ~/.claude/skills/journal-factory/bin/jf doctor
 ```
 
@@ -166,4 +166,4 @@ Sources, commits and what was left out of each bundle: [`references/10_skills_ca
 
 ## License
 
-MIT for PaperFactory's own text and code, see [LICENSE](LICENSE). Everything under `vendor/` keeps its own licence.
+MIT for JournalFactory's own text and code, see [LICENSE](LICENSE). Everything under `vendor/` keeps its own licence.

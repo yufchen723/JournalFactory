@@ -1,12 +1,12 @@
-# PaperFactory
+# JournalFactory
 
-用 Claude 把一个生物学课题从数据做到投稿。你告诉它手里有什么，PaperFactory 先读文献了解领域，再按证据选期刊，规划故事线和每一张图，然后按目标期刊自己的规范帮你画图、写稿，每条规范都有脚本检查，并注明出处。
+用 Claude 把一个生物学课题从数据做到投稿。你告诉它手里有什么，JournalFactory 先读文献了解领域，再按证据选期刊，规划故事线和每一张图，然后按目标期刊自己的规范帮你画图、写稿，每条规范都有脚本检查，并注明出处。
 
-![PaperFactory 总览](docs/overview.png)
+![JournalFactory 总览](docs/overview.png)
 
 **上：** 九个阶段。**左：** 用自带模板画的一张 Cell 全幅图（模拟数据）。**右：** 检查命令的输出示例。
 
-里面的 skill 叫 **Journal Factory**（`journal-factory`），命令行是 `jf`。[English](README.md)
+在 Claude 里它是 `journal-factory` 这个 skill，命令行是 `jf`。[English](README.md)
 
 ## 你会得到什么
 
@@ -45,7 +45,7 @@
 ## 安装
 
 ```bash
-git clone https://github.com/yufchen723/PaperFactory ~/.claude/skills/journal-factory
+git clone https://github.com/yufchen723/JournalFactory ~/.claude/skills/journal-factory
 ~/.claude/skills/journal-factory/bin/jf doctor
 bin/jf cell demo out/          # 不需要任何数据：用模拟数据画一张 6 面板图并检查
 ```
@@ -65,4 +65,4 @@ bin/jf cell demo out/          # 不需要任何数据：用模拟数据画一�
 
 ## 致谢与许可
 
-致谢、来源和许可见 [README.md](README.md#credits)。PaperFactory 自己的文字和代码为 MIT 许可；`vendor/` 下的内容保留各自的许可。
+致谢、来源和许可见 [README.md](README.md#credits)。JournalFactory 自己的文字和代码为 MIT 许可；`vendor/` 下的内容保留各自的许可。
