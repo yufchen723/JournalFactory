@@ -1,14 +1,19 @@
 # JournalFactory
 
-A paper factory for biology, run by Claude. Raw results go in at one end; a manuscript formatted for your journal comes out at the other. In between are nine stations: read the field, choose the journal from the evidence, plan the story and every figure, draw and audit the figures, write to the limits, check the statistics, package the submission, answer the reviewers. Name a journal, or let the evidence pick one, and the whole line resets to that journal's rules.
+A paper factory for biology, run by Claude. It works in four steps, top to bottom:
+
+1. **Explore the research field.** Before anything is written, it searches PubMed and Europe PMC with your questions, reads the papers into cards, and maps what is known, what is argued about and what is still open.
+2. **Read your own data.** It goes through your results and figures, scores how solid each one is, and finds what is new against that map: which claims are open, which extend earlier work, which are already taken, and what is still missing.
+3. **Assemble the paper with the journal's skills.** Built-in skill packs for Cell, Nature and other journals set the story, the figures, the text and the statistics to that journal's rules. Name a journal, or let the evidence pick one.
+4. **Edit on a live canvas.** Figures and main text open as editable pages: drag panels, retype text, ask Claude about anything you select, accept or reject its suggestions, export at the exact size.
 
 ![JournalFactory overview](docs/overview.png)
 
-**Top:** journal profiles feed `jf adapt`, which sets stations 2–8. **Middle:** one script and one simulated data set, exported for Cell and for Nature. **Bottom:** a sketch of the built-in studio (drag panels in millimetres, live journal checks, Ask Claude, accept or reject suggestions). **Right:** example terminal output.
+The studio panel in step 4 is a sketch; the two small figures in step 3 are real output from one script and one simulated data set.
 
 Claude knows it as the `journal-factory` skill; the command line is `jf`. [中文说明](README.zh-CN.md)
 
-## Any journal
+## Step 3 in detail: any journal
 
 | You say | Run | What happens |
 | --- | --- | --- |
@@ -30,7 +35,9 @@ What `jf adapt` changes, station by station:
 | 7 Submission | required extras (reporting summary, key resources table, graphical abstract) |
 | Studio | page sizes and the live checks in the Journal tab |
 
-## The line
+## Under the four steps: nine stations
+
+The four steps run on nine stations. Step 1 is station 1; step 2 is stations 0 and 2; step 3 is stations 3–8; step 4 is the studio, used from station 4 on.
 
 | # | Station | The question | Machines | Comes out |
 | --- | --- | --- | --- | --- |
@@ -48,11 +55,11 @@ What `jf adapt` changes, station by station:
 
 ## What each station gives you
 
-### Field research before you write (station 1)
+### Step 1 · Field research before you write (station 1)
 
 You write the questions as PubMed queries; JournalFactory searches PubMed and Europe PMC, ranks the papers found by several queries first, reads them into paper cards, verifies every reference, and writes one page: what is known, what is argued about, and for each of your claims whether it is open, an extension, or already taken. The page is browsable, with links to the papers.
 
-### A journal chosen by evidence (station 2)
+### Step 2 · Your data against the field, and a journal chosen by evidence (stations 0 and 2)
 
 Your results are scored 0–3 on eight dimensions (concept, technology, scale, orthogonal validation, replication, function, clinical relevance, resource) and compared with each journal's bar under three scenarios:
 
@@ -62,7 +69,7 @@ Your results are scored 0–3 on eight dimensions (concept, technology, scale, o
 | Plus analysis | Where after work that needs no new data? |
 | Plus new data | Where after the experiment you are considering? |
 
-### A plan with the gaps showing (station 3)
+### Step 3 · A plan with the gaps showing (station 3)
 
 Every main and extra figure, panel by panel, each with one of four marks, so a claim that still needs an experiment is never written as a result:
 
@@ -73,7 +80,7 @@ Every main and extra figure, panel by panel, each with one of four marks, so a c
 | needs analysis | no new data needed |
 | needs new data | experiment or cohort still to come |
 
-### Figures that pass the audit (station 4)
+### Step 3 · Figures that pass the audit (station 4)
 
 The same ten lines draw for any journal:
 
@@ -104,7 +111,7 @@ bin/jf demo out/ --journal nature        # six-panel figure from simulated data,
 bin/jf figure "Figure 2.pdf" --journal cancer-cell
 ```
 
-### Text to the journal's limits (stations 5–8)
+### Step 3 · Text to the journal's limits (stations 5–8)
 
 - `jf count manuscript.md --journal <id>`: words per section against the limits, for any journal.
 - **cell-skills**, a full pack for the journal Cell, built the way [nature-skills](https://github.com/Yuan1z0825/nature-skills) is built (router → manifest → small core → references on demand → check scripts) with Cell's own rules:
@@ -121,7 +128,7 @@ bin/jf figure "Figure 2.pdf" --journal cancer-cell
 
 - **Nature family, Cancer Cell and others:** bundled reference packs (`vendor/nature-skills`, `vendor/cancer-cell-skills`, `vendor/k-dense`) for writing conventions, reviewer view and reporting. `jf adapt` names the pack to open for your journal.
 
-### A studio for the whole manuscript
+### Step 4 · A studio for the whole manuscript
 
 `jf paper init <dir> --journal <id> --title "…"` creates one editable page per manuscript part at the journal's sizes: main text, front matter, each main and extra figure, the graphical abstract.
 
